@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Performance comercial — fundo branco, verde sofisticado, Fraunces + Inter. KPIs, tabelas comparativas, gráfico objetivo. Tema claro. */
+/* Performance comercial — fundo branco, verde sofisticado, Fraunces + Inter. KPIs, tabelas comparativas, gráficos interativos. Tema claro. */
 :root{
   color-scheme:light;
   --bg:#ffffff; --bg-alt:#f6f8f4; --surface:#ffffff; --ink:#1b2620; --muted:#64706a;
@@ -18,15 +18,14 @@
   --serif:"Fraunces",Georgia,"Times New Roman",serif; --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:15.5px;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.58;font-size:15.5px;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 h1,h2,h3{font-family:var(--serif);font-weight:560;text-wrap:balance;line-height:1.1;margin:0;color:var(--pine-ink)}
 h2{font-size:clamp(1.55rem,3.4vw,2.2rem);letter-spacing:-.012em;margin-bottom:.1em}
 h3{font-size:1.1rem;font-weight:600;color:var(--ink)}
 p{margin:.5em 0}
 .eyebrow{font-family:var(--sans);font-weight:700;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--pine)}
-.lede{color:var(--muted);font-size:1.03rem;max-width:66ch}
-.num{font-variant-numeric:tabular-nums}
+.lede{color:var(--muted);font-size:1.03rem;max-width:68ch}
 .sticky{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .sticky .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:11px}
 .sticky b{font-family:var(--serif);font-weight:600;color:var(--pine-ink)}
@@ -45,9 +44,11 @@ section.alt{background:var(--bg-alt)}
 .delta{font-weight:700;font-variant-numeric:tabular-nums}
 .up{color:var(--good)}.down{color:var(--crit)}.flat{color:var(--warn)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}
 .panel.good{border-left:3px solid var(--good)} .panel.warn{border-left:3px solid var(--warn)}
-.panel h3{margin-bottom:8px} .panel ol{margin:.3em 0 0;padding-left:20px;font-size:.92rem} .panel li{margin:.4em 0}
+.panel h3{margin-bottom:8px} .panel ol,.panel ul{margin:.3em 0 0;padding-left:20px;font-size:.93rem} .panel li{margin:.45em 0}
+.big{font-family:var(--serif);font-size:1.5rem;color:var(--pine-ink);font-variant-numeric:tabular-nums}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);background:var(--surface);margin-top:16px}
 table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
 th,td{padding:10px 13px;text-align:right;border-bottom:1px solid var(--line-2);white-space:nowrap}
@@ -57,242 +58,414 @@ tbody tr:last-child td{border-bottom:0}
 tr.total td{font-weight:700;background:var(--sage-soft)}
 .pos{color:var(--good);font-weight:650}.neg{color:var(--crit);font-weight:650}
 .chartcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);margin-top:16px}
-.legend{display:flex;gap:16px;font-size:.82rem;color:var(--muted);margin-top:8px}
+.chartcard svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;gap:16px;font-size:.82rem;color:var(--muted);margin-top:10px;flex-wrap:wrap}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.note{background:var(--sage-soft);border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:.86rem;margin-top:16px}
+.hint{font-size:.76rem;color:var(--muted);margin-top:4px}
+.note{background:var(--sage-soft);border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:.88rem;margin-top:16px}
 .note.warn{background:var(--warn-bg)}
 .muted{color:var(--muted)}
 .q{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
 .q .item{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--sage);border-radius:0 12px 12px 0;padding:14px 16px;box-shadow:var(--shadow)}
-.q .item p{margin:.2em 0;font-size:.9rem} .q .item .ask{font-weight:650;color:var(--pine-ink)}
-.recs{list-style:none;counter-reset:r;padding:0;margin:16px 0 0;display:grid;gap:11px}
-.recs li{counter-increment:r;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px 15px 56px;box-shadow:var(--shadow);font-size:.94rem}
-.recs li::before{content:counter(r);position:absolute;left:14px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:var(--pine);color:#fff;font-weight:700;display:grid;place-items:center;font-family:var(--serif)}
-.recs .pri{font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--pine);margin-right:6px}
-@media (max-width:720px){.two,.q{grid-template-columns:1fr}}
+.q .item p{margin:.2em 0;font-size:.92rem} .q .item .ask{font-weight:650;color:var(--pine-ink)}
+/* barras interativas */
+.bar{transition:opacity .12s} .bar:hover{opacity:.82;cursor:pointer}
+.hotzone{fill:transparent;cursor:pointer}
+#tip{position:fixed;z-index:60;max-width:270px;background:#12201a;color:#fff;border-radius:12px;padding:11px 13px;font-size:.8rem;line-height:1.45;box-shadow:0 8px 30px rgba(0,0,0,.28);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}
+#tip.on{opacity:1;transform:translateY(0)}
+#tip .tt{font-weight:700;font-size:.82rem;margin-bottom:5px;color:#cfe7d8}
+#tip .row{display:flex;justify-content:space-between;gap:14px;font-variant-numeric:tabular-nums}
+#tip .row span:last-child{font-weight:600}
+#tip .ex{margin-top:6px;color:#b9c7bf;font-size:.74rem}
+#tip .vv{color:#8fe0ad;font-weight:700}
+@media (max-width:760px){.two,.q,.three{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="sticky"><div class="wrap"><b>Use Tricô — Performance do E-commerce</b><span class="tag">02/11 – 08/11/2026</span></div></div>
+<div class="sticky"><div class="wrap"><b>Use Tricô — Como foi a semana da loja</b><span class="tag">02/11 a 08/11/2026</span></div></div>
+<div id="tip" role="status" aria-live="polite"></div>
 
 <div class="wrap">
 
 <header class="hero">
-  <div class="eyebrow">Relatório comercial semanal · 1ª edição</div>
-  <h1>Performance do E-commerce</h1>
-  <p class="lede">A loja melhorou comercialmente — e muito. Esta edição mostra quanto cresceu, o que explicou a evolução e onde estão as próximas decisões. Semana de <b>02 a 08/11</b> comparada com <b>26/10 a 01/11</b>.</p>
+  <div class="eyebrow">Relatório da loja · Semana de 02 a 08 de novembro</div>
+  <h1>Como foi a semana da loja</h1>
+  <p class="lede">A loja vendeu muito mais nesta semana. Este relatório mostra, em linguagem simples, quanto a loja vendeu, o que mudou em relação à semana anterior e por que isso aconteceu. Comparamos <b>02 a 08/11</b> com a semana anterior, <b>26/10 a 01/11</b>.</p>
   <div class="sub">
-    <span>Comercial <b>Tray</b> (captado e aprovado)</span><span>Comportamento <b>GA4</b></span><span>Mídia <b>Meta · Google</b></span>
-    <span class="muted">Três fontes, três perguntas — nunca somadas</span>
+    <span>💡 Passe o mouse (ou toque, no celular) nos gráficos para ver os detalhes de cada número.</span>
   </div>
 </header>
 
 <section>
-  <div class="eyebrow">Visão executiva</div>
+  <div class="eyebrow">Resumo da semana</div>
   <h2>A semana em números</h2>
-  <p class="lede">Resultado comercial pela Tray; comportamento do site pelo GA4. <b>Aprovado</b> = pedido com pagamento registrado (valor de pagamento &gt; 0), não pelo status atual; a semana é contada pela data do pedido — se contada pela data do pagamento, o total mudaria menos de 0,5%. Cada taxa traz numerador e denominador.</p>
+  <p class="lede">Os valores de venda vêm da <b>Tray</b> (a plataforma da loja). "Aprovado" é o pedido cujo pagamento foi confirmado. O comportamento das visitas ao site vem do <b>Google Analytics</b>.</p>
   <div class="kpis">
-    <div class="kpi"><div class="k">Faturamento aprovado</div><div class="v">R$143,4 mil</div><div class="d">R$61,1 mil · <span class="delta up">+135%</span></div></div>
-    <div class="kpi"><div class="k">Faturamento captado</div><div class="v">R$156,5 mil</div><div class="d">R$69,5 mil · <span class="delta up">+125%</span></div></div>
-    <div class="kpi"><div class="k">Pedidos aprovados</div><div class="v">168</div><div class="d">77 · <span class="delta up">+118%</span></div></div>
-    <div class="kpi"><div class="k">Ticket médio aprovado</div><div class="v">R$854</div><div class="d">R$793 · <span class="delta up">+8%</span></div></div>
-    <div class="kpi"><div class="k">Aprovação financeira</div><div class="v">92,8%</div><div class="d">93,9% · <span class="delta flat">−1,1 p.p.</span> (dos pedidos)</div></div>
-    <div class="kpi"><div class="k">Média diária aprovada</div><div class="v">R$20,5 mil</div><div class="d">R$8,7 mil · <span class="delta up">+135%</span></div></div>
-    <div class="kpi"><div class="k">Sessões (GA4)</div><div class="v">20.508</div><div class="d">28.214 · <span class="delta down">−27%</span></div></div>
-    <div class="kpi"><div class="k">Conversão (GA4)</div><div class="v">0,91%</div><div class="d">0,56% · <span class="delta up">+62%</span> · compras÷sessões</div></div>
-    <div class="kpi"><div class="k">Receita/sessão (GA4)</div><div class="v">R$7,37</div><div class="d">R$4,31 · <span class="delta up">+71%</span></div></div>
+    <div class="kpi"><div class="k">Vendas aprovadas</div><div class="v">R$143,4 mil</div><div class="d">antes R$61,1 mil · <span class="delta up">+135%</span></div></div>
+    <div class="kpi"><div class="k">Vendas feitas (antes do pagamento)</div><div class="v">R$156,5 mil</div><div class="d">antes R$69,5 mil · <span class="delta up">+125%</span></div></div>
+    <div class="kpi"><div class="k">Pedidos aprovados</div><div class="v">168</div><div class="d">antes 77 · <span class="delta up">+118%</span></div></div>
+    <div class="kpi"><div class="k">Valor médio por pedido</div><div class="v">R$854</div><div class="d">antes R$793 · <span class="delta up">+8%</span></div></div>
+    <div class="kpi"><div class="k">Pagamentos aprovados</div><div class="v">92,8%</div><div class="d">antes 93,9% · <span class="delta flat">estável</span></div></div>
+    <div class="kpi"><div class="k">Venda média por dia</div><div class="v">R$20,5 mil</div><div class="d">antes R$8,7 mil · <span class="delta up">+135%</span></div></div>
+    <div class="kpi"><div class="k">Visitas ao site</div><div class="v">20.508</div><div class="d">antes 28.214 · <span class="delta down">−27%</span></div></div>
+    <div class="kpi"><div class="k">Visitas que viraram compra</div><div class="v">0,91%</div><div class="d">antes 0,56% · <span class="delta up">+62%</span></div></div>
   </div>
   <div class="two">
-    <div class="panel good"><h3>As três maiores melhorias</h3><ol>
-      <li><b>Faturamento aprovado +135%</b> (R$61,1 mil → R$143,4 mil) — a loja mais que dobrou na semana de Black Friday.</li>
-      <li><b>Conversão do site +62%</b> (0,56% → 0,91%) com <b>menos sessões</b>: cresceu por eficiência, não por volume.</li>
-      <li><b>Loja virtual (online) +233%</b> no aprovado (R$18,9 mil → R$62,9 mil) — o canal próprio disparou.</li>
-    </ol></div>
-    <div class="panel warn"><h3>Os três pontos de atenção</h3><ol>
-      <li><b>Aquisição de novos caiu:</b> visitantes novos −42% e sessões −27% (GA4). O crescimento veio da base; sustentar exige repor o topo do funil.</li>
-      <li><b>Google Ads sem conversão registrada:</b> ~R$2,0 mil/semana (R$1.972), 0 conversões no painel (o GA4 vê R$9,3 mil em Busca paga) — importação de conversão a corrigir.</li>
-      <li><b>Metade da receita é venda manual (PARTICULAR, 56%):</b> saudável, mas a reconciliação entre GA4 e a loja online ainda é imperfeita (ver §Medição).</li>
-    </ol></div>
+    <div class="panel good"><h3>O que foi bem</h3><ul>
+      <li><b>A loja mais que dobrou as vendas:</b> o faturamento aprovado foi de R$61,1 mil para R$143,4 mil (+135%).</li>
+      <li><b>Mais pedidos e pedidos maiores:</b> foram 77 → 168 pedidos aprovados, e o valor médio por pedido subiu de R$793 para R$854.</li>
+      <li><b>O site converteu melhor:</b> mesmo com menos gente, uma parcela maior das visitas virou compra (de 0,56% para 0,91%) — ajudado pelo aumento das adições ao carrinho por visita.</li>
+    </ul></div>
+    <div class="panel warn"><h3>O que merece atenção</h3><ul>
+      <li><b>Chegou menos gente nova:</b> as visitas caíram 27% e os visitantes que nunca tinham entrado caíram 42%. No site, a maior parte da receita registrada veio de quem já conhecia a marca.</li>
+      <li><b>As vendas no computador caíram:</b> o celular cresceu bastante, mas o computador vendeu menos que na semana anterior (de R$33,2 mil para R$15,0 mil no site).</li>
+      <li><b>Google Ads:</b> estamos revisando com o Dani a configuração das conversões do Google Ads para melhorar a leitura dos resultados das campanhas.</li>
+    </ul></div>
   </div>
-  <div class="note warn">⚠️ <b>Três receitas, não somáveis.</b> <b>Tray aprovado</b> = caixa confirmado (R$143,4 mil). <b>GA4</b> = comportamento no site (R$151,1 mil atribuídos, população e método próprios). <b>Meta</b> = atribuição de mídia (R$127 mil, janela da plataforma). ROAS de plataforma ≠ caixa aprovado. Dados pessoais dos clientes não são publicados.</div>
 </section>
 
 <section class="alt">
-  <div class="eyebrow">Ritmo da semana</div>
-  <h2>Faturamento dia a dia</h2>
-  <p class="lede">Faturamento captado por dia (Tray), semana atual vs. semana anterior. A quarta 04/11 concentrou o maior faturamento; o fim de semana (06–08/11, Black Friday) permaneceu em patamar alto.</p>
+  <div class="eyebrow">Dia a dia</div>
+  <h2>Quanto a loja vendeu em cada dia</h2>
+  <p class="lede">Cada par de barras compara o mesmo dia da semana: a barra escura é esta semana, a clara é a semana anterior. Os valores são das vendas feitas (antes da confirmação do pagamento).</p>
   <div class="chartcard">
-    <svg viewBox="0 0 680 210" width="100%" role="img" aria-label="Faturamento captado por dia, semana atual vs anterior" style="max-width:720px">
-    <line x1="0" y1="138" x2="680" y2="138" stroke="var(--line-2)"/><text x="2" y="135" font-size="9" fill="var(--muted)">10k</text>
-    <line x1="0" y1="101" x2="680" y2="101" stroke="var(--line-2)"/><text x="2" y="98" font-size="9" fill="var(--muted)">20k</text>
-    <line x1="0" y1="64" x2="680" y2="64" stroke="var(--line-2)"/><text x="2" y="61" font-size="9" fill="var(--muted)">30k</text>
-    <line x1="0" y1="27" x2="680" y2="27" stroke="var(--line-2)"/><text x="2" y="24" font-size="9" fill="var(--muted)">40k</text>
-    <rect x="25" y="167" width="22" height="8" rx="3" fill="var(--sage)"/><rect x="51" y="146" width="22" height="29" rx="3" fill="var(--pine)"/><text x="49" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">seg</text><text x="62" y="143" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">8</text>
-    <rect x="122" y="94" width="22" height="81" rx="3" fill="var(--sage)"/><rect x="148" y="131" width="22" height="44" rx="3" fill="var(--pine)"/><text x="146" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">ter</text><text x="159" y="128" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">12</text>
-    <rect x="219" y="164" width="22" height="11" rx="3" fill="var(--sage)"/><rect x="245" y="21" width="22" height="154" rx="3" fill="var(--pine)"/><text x="243" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">qua</text><text x="256" y="18" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">42</text>
-    <rect x="316" y="157" width="22" height="18" rx="3" fill="var(--sage)"/><rect x="342" y="93" width="22" height="82" rx="3" fill="var(--pine)"/><text x="340" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">qui</text><text x="353" y="90" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">22</text>
-    <rect x="413" y="113" width="22" height="62" rx="3" fill="var(--sage)"/><rect x="439" y="72" width="22" height="103" rx="3" fill="var(--pine)"/><text x="437" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">sex</text><text x="450" y="69" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">28</text>
-    <rect x="510" y="119" width="22" height="56" rx="3" fill="var(--sage)"/><rect x="536" y="87" width="22" height="88" rx="3" fill="var(--pine)"/><text x="534" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">sáb</text><text x="547" y="84" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">24</text>
-    <rect x="607" y="155" width="22" height="20" rx="3" fill="var(--sage)"/><rect x="633" y="98" width="22" height="78" rx="3" fill="var(--pine)"/><text x="631" y="189" font-size="10" fill="var(--muted)" text-anchor="middle">dom</text><text x="644" y="94" font-size="8.5" fill="var(--pine-ink)" text-anchor="middle">21</text>
-    </svg>
-    <div class="legend"><span><i style="background:var(--pine)"></i>02–08/11 (atual)</span><span><i style="background:var(--sage)"></i>26/10–01/11 (anterior)</span><span class="muted">valores em R$ mil · captado</span></div>
+    <svg id="chartDia" viewBox="0 0 720 270" role="img" aria-label="Vendas por dia da semana, esta semana comparada com a anterior"></svg>
+    <div class="legend"><span><i style="background:var(--pine)"></i>Esta semana (02–08/11)</span><span><i style="background:var(--sage)"></i>Semana anterior (26/10–01/11)</span><span class="muted">valores em reais · passe o mouse ou toque para ver cada dia</span></div>
   </div>
-  <p class="note">A <b>live de 03/11</b> e as <b>ações de Black Friday (06 e 08/11)</b> coincidem com os dias fortes, mas o relatório não declara causa por coincidência de data — o pico de 04/11 (D+1 da live) e a sustentação do fim de semana são consistentes com elas, não uma prova.</p>
+  <p class="note">A <b>live aconteceu na terça-feira, 03/11</b> (mudou de dia por causa do feriado). As ofertas de <b>Black Friday</b> foram no fim de semana (06 a 08/11). Esses dias coincidem com vendas fortes, mas não dá para dizer que foram a causa exata do resultado — são momentos que aconteceram junto com as vendas altas, não uma prova.</p>
 </section>
 
 <section>
-  <div class="eyebrow">Funil</div>
-  <h2>Do acesso à compra</h2>
-  <p class="lede">Etapas de e-commerce do GA4 (eventos). O pedido aprovado da Tray é mostrado à parte — é caixa confirmado, não uma etapa identificada usuário a usuário no funil do GA4.</p>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Etapa</th><th>Anterior</th><th>Atual</th><th>Variação</th><th>Média/dia</th><th>Passagem</th></tr></thead>
-    <tbody>
-      <tr><td>Sessões (GA4)</td><td>28.214</td><td>20.508</td><td class="neg">−27%</td><td>2.930</td><td>—</td></tr>
-      <tr><td>Adições ao carrinho</td><td>1.358</td><td>1.714</td><td class="pos">+26%</td><td>245</td><td>8,4% das sessões</td></tr>
-      <tr><td>Inícios de checkout</td><td>426</td><td>532</td><td class="pos">+25%</td><td>76</td><td>31% dos carrinhos</td></tr>
-      <tr><td>Compras (GA4)</td><td>158</td><td>186</td><td class="pos">+18%</td><td>27</td><td>35% dos checkouts</td></tr>
-      <tr><td>Receita (GA4, atribuída)</td><td>R$121,6 mil</td><td>R$151,1 mil</td><td class="pos">+24%</td><td>R$21,6 mil</td><td>R$7,37/sessão</td></tr>
-    </tbody>
-  </table></div>
-  <div class="note">Em paralelo (caixa Tray, população distinta): <b>pedidos aprovados 77 → 168 (+118%)</b>. As razões de passagem são entre eventos agregados do GA4, não probabilidade sequencial de uma mesma jornada. <b>As etapas após a sessão cresceram</b> apesar da queda de tráfego — o site ficou mais eficiente.</p>
-</section>
-
-<section class="alt">
-  <div class="eyebrow">Canais</div>
-  <h2>De onde veio o resultado</h2>
-  <p class="lede">Comportamento por canal no GA4 (sessões, compras e receita atribuída no site). É a leitura de tráfego/conversão — separada da atribuição das plataformas e do caixa da Tray.</p>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Canal (GA4)</th><th>Sessões ant.→atual</th><th>Compras</th><th>Receita GA4</th><th>Conversão</th><th>Leitura</th></tr></thead>
-    <tbody>
-      <tr><td>Social orgânico</td><td>20.702 → 9.845</td><td>81</td><td>R$67,4 mil</td><td class="pos">0,82%</td><td style="text-align:left">metade das sessões, mas converteu muito melhor</td></tr>
-      <tr><td>Direto</td><td>3.091 → 2.503</td><td>23</td><td>R$17,0 mil</td><td>0,92%</td><td style="text-align:left">receita caiu forte (era R$54,8 mil)</td></tr>
-      <tr><td>Paga — "Outros"</td><td>0 → 4.245</td><td>16</td><td>R$17,6 mil</td><td>0,38%</td><td style="text-align:left">novo volume pago na semana</td></tr>
-      <tr><td>Não atribuído</td><td>1.546 → 1.304</td><td>22</td><td>R$15,7 mil</td><td>1,69%</td><td style="text-align:left">origem não identificada pelo GA4 — receita +230%; investigar UTMs</td></tr>
-      <tr><td>Referência</td><td>795 → 742</td><td>19</td><td>R$15,1 mil</td><td>2,56%</td><td style="text-align:left">pequeno e muito eficiente</td></tr>
-      <tr><td>Busca paga (Google)</td><td>533 → 603</td><td>14</td><td>R$9,3 mil</td><td>2,32%</td><td style="text-align:left">converteu no GA4 (ver Medição)</td></tr>
-      <tr><td>E-mail / Orgânica / outros</td><td>— </td><td>11</td><td>R$9,0 mil</td><td>—</td><td style="text-align:left">cauda</td></tr>
-      <tr class="total"><td>Total (canais listados)</td><td>→ 20.439</td><td>186</td><td>R$151,1 mil</td><td>0,91%</td><td style="text-align:left">overview GA4: 20.508 sessões</td></tr>
-    </tbody>
-  </table></div>
-  <p class="note">Mudança de mix: o <b>social orgânico</b> perdeu volume (−52% de sessões) mas ganhou eficiência; o <b>direto</b> perdeu receita; entrou a <b>paga "outros"</b>. O crescimento de conversão aparece na maioria dos canais. A soma das linhas (20.439 sessões) são os canais rotulados; o <b>overview do GA4 é 20.508</b> — a diferença são sessões sem canal atribuído, e a conversão geral (0,91%) é calculada sobre o overview, não sobre a soma das linhas.</p>
-</section>
-
-<section>
-  <div class="eyebrow">Geografia</div>
-  <h2>Onde a loja vende</h2>
-  <p class="lede">Receita aprovada (Tray) por estado. O Sul concentra a operação; o RS cresceu mais em valor absoluto.</p>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Estado</th><th>Pedidos aprov. (atual)</th><th>Receita aprovada</th><th>Participação</th><th>Anterior</th></tr></thead>
-    <tbody>
-      <tr><td>RS</td><td>78</td><td>R$74,5 mil</td><td>52%</td><td>R$26,8 mil</td></tr>
-      <tr><td>PR</td><td>34</td><td>R$24,7 mil</td><td>17%</td><td>R$7,5 mil</td></tr>
-      <tr><td>SC</td><td>28</td><td>R$19,5 mil</td><td>14%</td><td>R$15,1 mil</td></tr>
-      <tr><td>SP</td><td>19</td><td>R$15,1 mil</td><td>11%</td><td>R$3,5 mil</td></tr>
-      <tr><td>MG · MT · outros</td><td>9</td><td>R$9,6 mil</td><td>7%</td><td>R$8,2 mil</td></tr>
-    </tbody>
-  </table></div>
-  <p class="note">RS, PR, SC e SP concentram 93% da receita aprovada. Não há evidência nestes dados para atribuir qualquer diferença a frete ou prazo — é só a distribuição de vendas.</p>
-</section>
-
-<section class="alt">
-  <div class="eyebrow">Dispositivo e perfil</div>
-  <h2>Quem comprou</h2>
+  <div class="eyebrow">O resultado principal</div>
+  <h2>De onde veio o crescimento das vendas</h2>
+  <p class="lede">As vendas aprovadas saíram de <b>R$61,1 mil para R$143,4 mil</b>. Dá para enxergar esse crescimento de duas formas simples — cada uma olha por um ângulo diferente (elas não se somam).</p>
   <div class="two">
-    <div class="panel"><h3>Dispositivo (GA4, por sistema)</h3>
-      <div class="tablewrap" style="margin-top:10px"><table>
-        <thead><tr><th>—</th><th>Sessões</th><th>Receita GA4</th><th>Conversão</th></tr></thead>
-        <tbody>
-          <tr><td>Mobile (Android+iOS)</td><td>19.327</td><td>R$136,1 mil</td><td class="pos">0,84%</td></tr>
-          <tr><td>Desktop (Win/Mac/Linux)</td><td>1.297</td><td>R$15,0 mil</td><td class="pos">1,85%</td></tr>
-        </tbody>
-      </table></div>
-      <p class="why muted" style="font-size:.85rem">Mobile = 90% da receita e melhorou muito a conversão (0,49% → 0,84%). Desktop é pequeno, mas converteu o dobro (1,85% vs 0,84%); o porquê é hipótese a investigar.</p>
+    <div class="panel"><h3>1. Mais pedidos e pedidos um pouco maiores</h3>
+      <p>A loja vendeu <b>mais pedidos</b> e o <b>valor médio de cada pedido também subiu</b>:</p>
+      <ul>
+        <li>Pedidos aprovados: <b>77 → 168</b> (mais que o dobro).</li>
+        <li>Valor médio por pedido: <b>R$793 → R$854</b>.</li>
+      </ul>
+      <p class="muted" style="font-size:.86rem">Vender mais que o dobro de pedidos, cada um um pouco mais caro, explica o salto de +135%.</p>
     </div>
-    <div class="panel"><h3>Novos × recorrentes (GA4)</h3>
-      <div class="tablewrap" style="margin-top:10px"><table>
-        <thead><tr><th>—</th><th>Sessões ant.→atual</th><th>Receita GA4</th></tr></thead>
-        <tbody>
-          <tr><td>Recorrentes</td><td>10.339 → 9.523</td><td>R$131,7 mil</td></tr>
-          <tr><td>Novos</td><td>14.565 → 8.425</td><td>R$19,5 mil</td></tr>
-        </tbody>
-      </table></div>
-      <p class="why muted" style="font-size:.85rem">Os <b>novos caíram −42%</b>; a base recorrente carrega <b>87% da receita</b>. "Recorrente" no GA4 = quem já visitou (≥1 sessão), <b>não</b> necessariamente quem já comprou.</p>
+    <div class="panel"><h3>2. As duas classificações de venda da Tray</h3>
+      <p>A Tray registra cada venda aprovada em uma de duas classificações — <b>Loja virtual</b> e <b>Particular</b>. As duas cresceram:</p>
+      <ul>
+        <li><b>Loja virtual:</b> R$18,9 mil → <b>R$62,9 mil</b>.</li>
+        <li><b>Particular:</b> R$42,2 mil → <b>R$80,5 mil</b>.</li>
+      </ul>
+      <p class="muted" style="font-size:.86rem">Somando as duas, chega-se ao total de R$143,4 mil. São rótulos de registro da Tray; o que diferencia cada um na operação não está confirmado nos dados que temos aqui, então mostramos os grupos exatamente como a Tray os classifica.</p>
     </div>
   </div>
-</section>
-
-<section>
-  <div class="eyebrow">Produtos</div>
-  <h2>O que vendeu</h2>
-  <p class="lede">Produtos efetivamente vendidos (Tray, pedidos aprovados da semana; receita de item = preço × quantidade, antes de descontos). Reforça o relatório de Criativos & Produtos, sem duplicá-lo.</p>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Produto</th><th>Unidades</th><th>Receita (item)</th></tr></thead>
-    <tbody>
-      <tr><td>Camisa Mavi Linho (bordado coração)</td><td>18</td><td>R$10,8 mil</td></tr>
-      <tr><td>Calça Jeans Janaína Barrel</td><td>20</td><td>R$9,2 mil</td></tr>
-      <tr><td>Camisa Zelia Linho Nózinho</td><td>14</td><td>R$8,4 mil</td></tr>
-      <tr><td>Vestido Antônia Linho Midi</td><td>8</td><td>R$6,4 mil</td></tr>
-      <tr><td>Calça Jane em Algodão</td><td>7</td><td>R$3,1 mil</td></tr>
-      <tr><td>Casaco Nati Ponto Pérola <span class="muted">(inverno)</span></td><td>7</td><td>R$3,1 mil</td></tr>
-      <tr><td>Camisa Floral Eliane Linho</td><td>5</td><td>R$3,0 mil</td></tr>
-      <tr><td>Calça Jeans Reta Paula</td><td>6</td><td>R$2,6 mil</td></tr>
-    </tbody>
-  </table></div>
-  <p class="note">Leitura: <b>Camisa Mavi</b> lidera; <b>Calça Janaína</b> e <b>Camisa Zelia Nózinho</b> vendem forte em unidades. Hipótese a confirmar com os dados de visualização de produto (relatório de Criativos & Produtos): o <b>Vestido Antônia</b> vende bem, mas sinais de muita visualização e pouca compra sugerem oportunidade de CRO na página. Esta tabela reforça o relatório de Criativos & Produtos sem substituí-lo.</p>
+  <div class="chartcard">
+    <svg id="chartCresc" viewBox="0 0 520 260" role="img" aria-label="Vendas aprovadas da semana anterior e desta semana, pelas duas classificações da Tray"></svg>
+    <div class="legend"><span><i style="background:var(--pine)"></i>Loja virtual</span><span><i style="background:var(--sage)"></i>Particular</span><span class="muted">vendas aprovadas (Tray) · passe o mouse ou toque em cada parte</span></div>
+  </div>
+  <p class="note">Sobre o site: mesmo com <b>menos visitas</b> (de 28.214 para 20.508, −27%), uma parcela <b>maior</b> das visitas virou compra (de 0,56% para 0,91%). Ou seja, o site aproveitou melhor cada visita.</p>
 </section>
 
 <section class="alt">
-  <div class="eyebrow">O que explicou a mudança</div>
-  <h2>De onde veio o +135%</h2>
-  <p class="lede">Decomposição direcional (não exata — ver Medição). O crescimento <b>não</b> veio de mais tráfego: as sessões caíram. Veio de conversão e, em menor grau, de ticket.</p>
+  <div class="eyebrow">Por que vendeu mais com menos gente</div>
+  <h2>A loja converteu melhor</h2>
+  <p class="lede">A parcela de visitas que vira compra subiu de <b>0,56% para 0,91%</b>. Esse ganho tem duas partes — e só uma delas é melhora de verdade na taxa de conversão.</p>
   <div class="two">
-    <div class="panel"><h3>Loja online (Tray · loja virtual)</h3>
-      <p>Receita online aprovada <b>R$18,9 mil → R$62,9 mil (+233%)</b>, decomposta em:</p>
-      <ol>
-        <li><b>Conversão (pedidos online ÷ sessões): ≈ +285%</b> — o motor principal.</li>
-        <li><b>Ticket online: R$539 → R$642 (+19%)</b> — contribuição secundária.</li>
-        <li><b>Tráfego: −27% de sessões</b> — puxou contra, mas foi mais que compensado.</li>
-      </ol>
+    <div class="panel"><h3>Parte 1 — Mudou quem visitou</h3>
+      <p>Parte da melhora aconteceu porque <b>mudou o perfil de quem entrou no site</b>, não porque cada grupo melhorou:</p>
+      <ul>
+        <li>Visitantes <b>novos</b> (que quase não compram) caíram de <b>52% para 41%</b> das visitas.</li>
+        <li>Visitantes que <b>já conheciam a marca</b> (que compram muito mais) subiram de <b>37% para 46%</b>.</li>
+      </ul>
+      <p class="muted" style="font-size:.86rem">Com mais gente conhecida no site, a média de conversão sobe sozinha. Essa parte explica <b>cerca de 1/3</b> da melhora — e ela volta atrás se a loja atrair mais gente nova de novo.</p>
     </div>
-    <div class="panel"><h3>Operação total (inclui venda manual)</h3>
-      <p>Faturamento aprovado <b>R$61,1 mil → R$143,4 mil</b>:</p>
-      <ol>
-        <li><b>Pedidos aprovados +118%</b> (77 → 168) — mais volume de compra com menos visitas.</li>
-        <li><b>Ticket aprovado +8%</b> (R$793 → R$854).</li>
-        <li><b>Aprovação financeira estável</b> (~93%).</li>
-        <li><b>Venda manual (PARTICULAR) +91%</b> e <b>loja online +233%</b> — ambas cresceram, a online mais rápido.</li>
-      </ol>
+    <div class="panel good"><h3>Parte 2 — A loja converteu melhor de verdade</h3>
+      <p>A maior parte (<b>cerca de 2/3</b>) é melhora real: <b>cada grupo passou a comprar mais</b>, e mais visitas chegaram ao carrinho:</p>
+      <ul>
+        <li>As adições ao carrinho por visita quase dobraram: de <b>4,8 para 8,4</b> a cada 100 visitas.</li>
+        <li>No celular, a conversão quase dobrou: de <b>0,49% para 0,86%</b>.</li>
+      </ul>
+      <p class="muted" style="font-size:.86rem">Isso aconteceu junto com as ofertas de Black Friday, que também podem ter ajudado. Uma semana só não prova que a loja passou a converter melhor de forma permanente — vale confirmar nas próximas semanas.</p>
     </div>
   </div>
-  <div class="note warn">🔎 <b>Medição (lacunas que afetam a precisão).</b> A decomposição é direcional porque: (a) a venda <b>PARTICULAR</b> (56% do caixa) não tem sessão associada — não entra numa conversão por sessão; (b) a receita do <b>GA4 (R$151,1 mil)</b> é bem maior que o caixa online aprovado da Tray (R$62,9 mil) — <b>~2,4× em receita</b> e <b>~1,9×</b> em pedidos online — provável contagem de captado + possível duplicação de evento; use a <b>Tray</b> como caixa, nunca o GA4; (c) o <b>Google Ads</b> registra 0 conversão no painel enquanto o GA4 atribui vendas à Busca paga — rastreamento a corrigir. Nenhuma dessas lacunas muda a direção (crescimento forte por conversão), só a precisão dos números por canal.</div>
 </section>
 
 <section>
-  <div class="eyebrow">Diagnóstico</div>
+  <div class="eyebrow">Do acesso à compra</div>
+  <h2>Como os visitantes avançaram até a compra</h2>
+  <p class="lede">As cinco etapas do caminho no site, da entrada até a compra (dados do Google Analytics). Os pedidos da Tray (caixa confirmado) são contados à parte.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Etapa</th><th>Semana anterior</th><th>Esta semana</th><th>Variação</th><th>O que é</th></tr></thead>
+    <tbody>
+      <tr><td>Visitas ao site</td><td>28.214</td><td>20.508</td><td class="neg">−27%</td><td style="text-align:left;white-space:normal">quem entrou no site</td></tr>
+      <tr><td>Visualizações de produto</td><td>68.822</td><td>77.651</td><td class="pos">+13%</td><td style="text-align:left;white-space:normal">produtos olhados</td></tr>
+      <tr><td>Adições ao carrinho</td><td>1.358</td><td>1.714</td><td class="pos">+26%</td><td style="text-align:left;white-space:normal">produtos postos no carrinho</td></tr>
+      <tr><td>Inícios de checkout</td><td>426</td><td>532</td><td class="pos">+25%</td><td style="text-align:left;white-space:normal">começaram a finalizar a compra</td></tr>
+      <tr><td>Compras no site</td><td>158</td><td>186</td><td class="pos">+18%</td><td style="text-align:left;white-space:normal">compras registradas</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Mesmo com menos visitas, a loja registrou mais visualizações de produtos, mais adições ao carrinho e mais compras. Em paralelo, os <b>pedidos aprovados na Tray</b> foram de <b>77 para 168</b> — essa é outra contagem (caixa confirmado) e não se mistura com o caminho no site.</p>
+
+  <h3 style="margin-top:30px">Como evoluiu a conversão</h3>
+  <p class="lede" style="margin-top:4px">Três medidas que mostram se o site aproveitou melhor cada visita. As duas primeiras são quantas vezes aquilo aconteceu a cada 100 visitas; a última é a parcela de visitas que terminou em compra.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Medida</th><th>Semana anterior</th><th>Esta semana</th><th>Variação</th></tr></thead>
+    <tbody>
+      <tr><td>Adições ao carrinho (a cada 100 visitas)</td><td>4,8</td><td>8,4</td><td class="pos">+74%</td></tr>
+      <tr><td>Inícios de checkout (a cada 100 visitas)</td><td>1,5</td><td>2,6</td><td class="pos">+72%</td></tr>
+      <tr><td>Taxa de conversão do site (compras ÷ visitas)</td><td>0,56%</td><td>0,91%</td><td class="pos">+0,35 p.p.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Os três indicadores por visita melhoraram, e a maior evolução foi nas <b>adições ao carrinho</b>: a cada 100 visitas, elas quase dobraram (de 4,8 para 8,4). A taxa de conversão do site (compras ÷ visitas) subiu de 0,56% para 0,91%. O passo mais estreito continua sendo o final, da finalização até a compra. O valor que o site registra passou de R$121,6 mil para R$151,1 mil (+24%).</p>
+</section>
+
+<section class="alt">
+  <div class="eyebrow">De onde vieram as visitas</div>
+  <h2>Os canais que trouxeram gente</h2>
+  <p class="lede">Aqui agrupamos a origem das visitas em nomes do dia a dia. Só chamamos de "anúncio" o tráfego que veio <b>comprovadamente</b> marcado como pago. Quando a origem não dá para identificar, fica como "origem não identificada" — não chutamos.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Canal</th><th>Visitas ant.→atual</th><th>Compras no site</th><th>Valor (site)</th><th>% que comprou</th><th>Variação do valor</th></tr></thead>
+    <tbody>
+      <tr><td>Meta Ads (Instagram/Facebook pago)</td><td>12.580 → 8.577</td><td>25 → 58</td><td>R$14,5 mil → R$55,0 mil</td><td>0,20% → 0,68%</td><td class="pos">+280%</td></tr>
+      <tr><td>Instagram e Facebook (posts/social)</td><td>7.870 → 5.666</td><td>35 → 39</td><td>R$28,1 mil → R$30,0 mil</td><td>0,44% → 0,69%</td><td class="pos">+7%</td></tr>
+      <tr><td>Acesso direto (digitou o site)</td><td>3.091 → 2.503</td><td>56 → 23</td><td>R$54,8 mil → R$17,0 mil</td><td>1,81% → 0,92%</td><td class="neg">−69%</td></tr>
+      <tr><td>Origem não identificada</td><td>1.139 → 1.055</td><td>2 → 14</td><td>R$0,7 mil → R$10,8 mil</td><td>0,18% → 1,33%</td><td class="pos">+1.441%</td></tr>
+      <tr><td>Links na bio e outros sites</td><td>744 → 703</td><td>12 → 20</td><td>R$7,1 mil → R$16,8 mil</td><td>1,61% → 2,84%</td><td class="pos">+139%</td></tr>
+      <tr><td>Google Ads</td><td>1.053 → 1.243</td><td>13 → 15</td><td>R$6,6 mil → R$9,7 mil</td><td>1,23% → 1,21%</td><td class="pos">+47%</td></tr>
+      <tr><td>E-mail / WhatsApp / CRM</td><td>577 → 486</td><td>10 → 13</td><td>R$7,2 mil → R$7,5 mil</td><td>1,73% → 2,67%</td><td class="pos">+4%</td></tr>
+      <tr><td>Busca orgânica (Google)</td><td>287 → 291</td><td>5 → 4</td><td>R$2,7 mil → R$4,3 mil</td><td>1,74% → 1,37%</td><td class="pos">+60%</td></tr>
+      <tr class="total"><td>Total do site</td><td>28.214 → 20.508</td><td>158 → 186</td><td>R$121,6 mil → R$151,1 mil</td><td>0,56% → 0,91%</td><td class="pos">+24%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Leitura simples: o <b>Meta Ads (Instagram/Facebook pago)</b> foi o que mais cresceu em valor (de R$14,5 mil para R$55,0 mil) — com menos visitas, mas convertendo bem melhor. O <b>acesso direto caiu</b> (de R$54,8 mil para R$17,0 mil). O grupo <b>Instagram e Facebook (posts)</b> pode conter anúncios cujo link não veio marcado como pago, por isso ele é separado do Meta Ads. A linha do total usa a contagem oficial de visitas do site (20.508).</p>
+</section>
+
+<section>
+  <div class="eyebrow">Celular, computador e tablet</div>
+  <h2>Em qual aparelho a loja vendeu</h2>
+  <p class="lede">Comparação completa entre as duas semanas, por tipo de aparelho (dados do site). A pergunta que importa: o crescimento veio do celular, do computador ou dos dois?</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Aparelho</th><th>Visitas ant.→atual</th><th>Compras ant.→atual</th><th>Receita site ant.→atual</th><th>Conversão ant.→atual</th><th>Mudança (p.p.)</th></tr></thead>
+    <tbody>
+      <tr><td>Celular</td><td>26.283 → 18.928</td><td>128 → 162</td><td>R$86,8 mil → R$136,1 mil</td><td>0,49% → 0,86%</td><td class="pos">+0,37</td></tr>
+      <tr><td>Computador</td><td>1.721 → 1.428</td><td>29 → 24</td><td>R$33,2 mil → R$15,0 mil</td><td>1,69% → 1,68%</td><td class="flat">−0,01</td></tr>
+      <tr><td>Tablet</td><td>189 → 112</td><td>1 → 0</td><td>R$1,7 mil → R$0,0 mil</td><td>0,53% → 0%</td><td class="neg">−0,53</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">A resposta é clara: <b>o crescimento veio do celular</b>. No celular, o valor subiu R$49 mil (de R$86,8 mil para R$136,1 mil) e a conversão melhorou bastante (0,49% → 0,86%, +0,37 ponto). O <b>computador</b> teve menos visitas e menos receita (de R$33,2 mil para R$15,0 mil), com a conversão praticamente igual (1,68%) — ele converte melhor que o celular, mas pesa pouco. O <b>tablet</b> é muito pequeno e praticamente não vende. Conversão = compras ÷ visitas do mesmo aparelho.</p>
+</section>
+
+<section class="alt">
+  <div class="eyebrow">Por estado</div>
+  <h2>De onde são os clientes</h2>
+  <p class="lede">Duas visões. Primeiro, o <b>caixa aprovado</b> (Tray), pelo estado de entrega do pedido — o dinheiro de verdade. Depois, o <b>comportamento no site</b> (Google Analytics), pelo estado de quem visitou, com a taxa de conversão de cada um.</p>
+  <h3 style="margin-top:20px">1. Caixa aprovado por estado (Tray)</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Estado</th><th>Pedidos aprovados</th><th>Valor (semana anterior)</th><th>Valor (esta semana)</th><th>Parte do total</th></tr></thead>
+    <tbody>
+      <tr><td>Rio Grande do Sul (RS)</td><td>78</td><td>R$26,8 mil</td><td>R$74,5 mil</td><td>52%</td></tr>
+      <tr><td>Paraná (PR)</td><td>34</td><td>R$7,5 mil</td><td>R$24,7 mil</td><td>17%</td></tr>
+      <tr><td>Santa Catarina (SC)</td><td>28</td><td>R$15,1 mil</td><td>R$19,5 mil</td><td>14%</td></tr>
+      <tr><td>São Paulo (SP)</td><td>19</td><td>R$3,5 mil</td><td>R$15,1 mil</td><td>11%</td></tr>
+      <tr><td>Outros estados</td><td>9</td><td>R$8,2 mil</td><td>R$9,6 mil</td><td>7%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">RS, PR, SC e SP juntos são 93% do caixa aprovado, e o Rio Grande do Sul sozinho é mais da metade.</p>
+  <h3 style="margin-top:28px">2. Comportamento no site por estado (Google Analytics)</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Estado</th><th>Visitas ant.→atual</th><th>Compras ant.→atual</th><th>Receita site ant.→atual</th><th>Conversão ant.→atual</th><th>Mudança (p.p.)</th></tr></thead>
+    <tbody>
+      <tr><td>Rio Grande do Sul (RS)</td><td>10.704 → 8.650</td><td>78 → 91</td><td>R$70,0 mil → R$75,6 mil</td><td>0,73% → 1,05%</td><td class="pos">+0,32</td></tr>
+      <tr><td>Paraná (PR)</td><td>3.401 → 2.867</td><td>20 → 36</td><td>R$13,4 mil → R$25,9 mil</td><td>0,59% → 1,26%</td><td class="pos">+0,67</td></tr>
+      <tr><td>Santa Catarina (SC)</td><td>4.014 → 3.169</td><td>18 → 26</td><td>R$10,0 mil → R$17,6 mil</td><td>0,45% → 0,82%</td><td class="pos">+0,37</td></tr>
+      <tr><td>São Paulo (SP)</td><td>5.120 → 2.772</td><td>26 → 22</td><td>R$16,3 mil → R$19,7 mil</td><td>0,51% → 0,79%</td><td class="pos">+0,29</td></tr>
+      <tr><td>Minas Gerais (MG) <span class="muted">*</span></td><td>657 → 621</td><td>5 → 2</td><td>R$3,0 mil → R$2,6 mil</td><td>0,76% → 0,32%</td><td class="neg">−0,44</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Os quatro estados principais <b>melhoraram a conversão</b> e mantiveram volume. Quem mais evoluiu em eficiência foi o <b>Paraná</b> (de 0,59% para 1,26%, quase o dobro, e a receita no site saltou de R$13,4 mil para R$25,9 mil); o <b>RS</b> segue o maior em volume. <span class="muted">* Minas Gerais tem amostra pequena (de 5 para 2 compras) — a variação não é confiável e não deve ser destacada.</span> Conversão = compras GA4 ÷ visitas do mesmo estado. Observação: esta visão usa o estado de quem visitou o site, que pode diferir do estado de entrega da tabela anterior.</p>
+</section>
+
+<section>
+  <div class="eyebrow">O que vendeu</div>
+  <h2>Os produtos no site</h2>
+  <p class="lede">Métricas de produto do site (Google Analytics), na mesma medida do relatório de Criativos & Produtos. A <b>taxa de compra por visualização</b> = unidades compradas ÷ visualizações da peça. Ela mostra quais produtos convertem bem mesmo com pouca vitrine.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Produto</th><th>Visualizações</th><th>Unidades</th><th>Receita</th><th>Compra por visualização</th></tr></thead>
+    <tbody>
+      <tr><td>Calça Jeans Janaína Barrel</td><td>436</td><td>21</td><td>R$9.658</td><td class="pos">4,8%</td></tr>
+      <tr><td>Camisa Mavi Linho (bordado coração)</td><td>695</td><td>15</td><td>R$8.998</td><td class="pos">2,2%</td></tr>
+      <tr><td>Camisa Zelia Linho Nózinho</td><td>632</td><td>13</td><td>R$7.799</td><td class="pos">2,1%</td></tr>
+      <tr><td>Vestido Antônia Linho Midi</td><td>1.957</td><td>8</td><td>R$6.399</td><td class="neg">0,4%</td></tr>
+      <tr><td>Calça Jane em Algodão</td><td>584</td><td>9</td><td>R$4.049</td><td>1,5%</td></tr>
+      <tr><td>Conjunto Jordana (linho)</td><td>97</td><td>3</td><td>R$3.600</td><td class="pos">3,1%</td></tr>
+      <tr><td>Calça Jeans Reta Paula</td><td>551</td><td>8</td><td>R$3.439</td><td>1,5%</td></tr>
+      <tr><td>Camisa Floral Eliane Linho</td><td>168</td><td>5</td><td>R$3.000</td><td class="pos">3,0%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Dois destaques: a <b>Calça Janaína</b> converte muito bem (4,8%) com pouca vitrine (só 436 visualizações) — forte candidata a mais conteúdo; e o <b>Vestido Antônia</b> teve a maior procura da semana (1.957 visualizações), mas pouca compra por visualização (0,4%) — oportunidade de melhorar a página e o conteúdo da peça. <span class="muted">Estes números são as métricas de item do site (GA4) e batem com o relatório de Criativos & Produtos da mesma semana. Por olharem o item no site, diferem do caixa da Tray por modelo (que inclui pedidos sem navegação registrada).</span></p>
+</section>
+
+<section class="alt">
+  <div class="eyebrow">Quem visitou o site</div>
+  <h2>Visitantes novos e quem já conhecia a marca</h2>
+  <div class="two">
+    <div class="panel"><h3>Quem já conhecia a marca</h3>
+      <p>São as pessoas que já tinham visitado o site antes. Elas foram o motor da semana:</p>
+      <ul>
+        <li>Visitas: 10.339 → <b>9.523</b>.</li>
+        <li>Responderam por <b>cerca de 87%</b> do valor das vendas do site.</li>
+      </ul>
+    </div>
+    <div class="panel warn"><h3>Visitantes novos</h3>
+      <p>São quem entrou no site pela primeira vez. Caíram bastante:</p>
+      <ul>
+        <li>Visitas: 14.565 → <b>8.425</b> (<b>−42%</b>).</li>
+        <li>Por isso a loja precisa voltar a atrair gente nova para sustentar o crescimento.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">Uma observação técnica importante: "já conhecia a marca" aqui significa quem <b>já tinha visitado o site</b> — não necessariamente quem já tinha comprado.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Para não confundir os números</div>
+  <h2>Três formas de medir, que não se somam</h2>
+  <div class="three">
+    <div class="panel"><h3>Tray — o caixa</h3><p class="big">R$143,4 mil</p><p class="muted" style="font-size:.86rem">Vendas aprovadas (pagamento confirmado). É o número de caixa, o mais confiável para resultado.</p></div>
+    <div class="panel"><h3>Site (Google Analytics)</h3><p class="big">R$151,1 mil</p><p class="muted" style="font-size:.86rem">Valor que o site registra das compras. Serve para entender o comportamento das visitas, não é o caixa.</p></div>
+    <div class="panel"><h3>Meta Ads — atribuição</h3><p class="big">R$127,0 mil</p><p class="muted" style="font-size:.86rem">Vendas que a ferramenta de anúncios atribui a si. É a conta da plataforma, com a régua dela.</p></div>
+  </div>
+  <p class="note warn">⚠️ <b>Esses três valores medem coisas diferentes e não devem ser somados.</b> Para o resultado da loja, use sempre o caixa da Tray (R$143,4 mil). Nenhum dado pessoal de cliente é mostrado neste relatório.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Conclusão</div>
   <h2>A loja evoluiu?</h2>
   <div class="q">
-    <div class="item"><p class="ask">Melhorou o resultado comercial?</p><p><b>Sim, fortemente.</b> Faturamento aprovado +135%, pedidos +118%, ticket +8%, com aprovação estável.</p></div>
-    <div class="item"><p class="ask">Melhorou a eficiência do site?</p><p><b>Sim.</b> Conversão +62% e receita por sessão +71%, com as etapas após a sessão subindo, apesar da queda de sessões.</p></div>
-    <div class="item"><p class="ask">A qualidade do tráfego evoluiu?</p><p><b>Em parte.</b> Converteu melhor, mas o <b>volume de novos visitantes caiu −42%</b> — ganho de eficiência, perda de aquisição.</p></div>
-    <div class="item"><p class="ask">Qual foi o principal fator?</p><p>A <b>conversão</b>, não o tráfego: a taxa subiu +62% enquanto as sessões caíram −27%. Black Friday e live coincidem temporalmente com os dias fortes, sem atribuição causal comprovada.</p></div>
-    <div class="item"><p class="ask">Onde estão os gargalos?</p><p>Aquisição de novos em queda; rastreamento de conversão do Google; dependência da venda manual; reconciliação GA4×Tray a calibrar.</p></div>
-    <div class="item"><p class="ask">Quais oportunidades têm mais impacto?</p><p>Repor topo de funil (novos) sem perder a conversão; corrigir a conversão do Google; escalar os campeões (Mavi, Janaína, Zelia); validar e, se confirmada, destravar a conversão do Vestido Antônia.</p></div>
+    <div class="item"><p class="ask">A loja vendeu mais?</p><p><b>Sim, muito.</b> As vendas aprovadas mais que dobraram: de R$61,1 mil para R$143,4 mil (+135%), com mais pedidos e pedidos um pouco maiores.</p></div>
+    <div class="item"><p class="ask">O site converteu melhor?</p><p><b>Sim.</b> Mesmo com menos visitas, uma parcela maior virou compra (de 0,56% para 0,91%), puxada pelo aumento das adições ao carrinho por visita.</p></div>
+    <div class="item"><p class="ask">Em que aparelho cresceu?</p><p>Quase tudo no <b>celular</b> (+R$49 mil de valor no site). O computador caiu.</p></div>
+    <div class="item"><p class="ask">O que puxou o crescimento?</p><p>A loja <b>converteu melhor</b>, não teve mais visitas. A Black Friday e a live aconteceram junto com os dias fortes, mas não dá para provar que foram a causa.</p></div>
+    <div class="item"><p class="ask">O que ficou mais fraco?</p><p>A chegada de <b>gente nova</b> caiu (−42%) e as <b>vendas por acesso direto</b> diminuíram bastante.</p></div>
+    <div class="item"><p class="ask">Dá para confiar nos números?</p><p>Sim. As vendas vêm da Tray (caixa confirmado) e o comportamento do site, do Google Analytics. Há um detalhe a resolver no <b>Google Ads</b>: ele registra as visitas e o gasto, mas as compras não aparecem na coluna de conversões dele — provavelmente porque não existe uma ação de "compra" configurada ali (a confirmar com quem cuida da conta). Por isso ele mostra "0 vendas" no painel, mesmo com as vendas aparecendo na Tray e no Google Analytics.</p></div>
   </div>
-  <h3 style="margin:28px 0 0">O que priorizar na próxima semana</h3>
-  <ol class="recs">
-    <li><span class="pri">Agora</span><b>Aquisição qualificada de novos visitantes</b> — o crescimento veio da base; sem repor o topo do funil, o patamar não se sustenta depois da Black Friday.</li>
-    <li><span class="pri">Agora</span><b>Corrigir o rastreamento de conversão do Google Ads</b> — ~R$2,0 mil/semana gastos (R$1.972, 1.413 cliques) com 0 conversão registrada no painel; sem isso não dá para otimizar nem decidir verba.</li>
-    <li><span class="pri">Esta semana</span><b>Escalar os produtos campeões</b> (Camisa Mavi, Janaína, Zelia) e <b>validar a hipótese de baixa conversão do Vestido Antônia</b> (muitas vendas em unidades; sinais de visualização alta a confirmar) e destravar a página se confirmada — alavanca de receita com o tráfego atual.</li>
-    <li><span class="pri">Esta semana</span><b>Sustentar a conversão da base pós-Black Friday</b> — remarketing e recompra, aproveitando que a base recorrente carrega ~87% da receita online.</li>
-    <li><span class="pri">Calibrar</span><b>Reconciliar GA4 × Tray</b> (pedido a pedido na loja virtual) para fechar a medição e dar precisão às próximas decisões por canal.</li>
-  </ol>
 </section>
 
 <div style="padding-block:40px 24px;border-top:1px solid var(--line);text-align:center">
-  <div class="eyebrow" style="color:var(--sage)">Use Tricô · Performance do E-commerce</div>
-  <p class="muted" style="font-size:.84rem;margin-top:6px">Edição de 02–08/11/2026 · comparada com 26/10–01/11</p>
+  <div class="eyebrow" style="color:var(--sage)">Use Tricô · Como foi a semana da loja</div>
+  <p class="muted" style="font-size:.84rem;margin-top:6px">Semana de 02 a 08/11/2026 · comparada com 26/10 a 01/11</p>
 </div>
 
 </div>
+
+<script>
+(function(){
+  var tip=document.getElementById('tip');
+  function fmt(n){return 'R$ '+Math.round(n).toLocaleString('pt-BR');}
+  function fmtE(n){return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  function pct(a,b){if(!a)return '—';var v=(b/a-1)*100;return (v>=0?'+':'')+v.toLocaleString('pt-BR',{maximumFractionDigits:0})+'%';}
+  function showTip(html,x,y){
+    tip.innerHTML=html; tip.classList.add('on');
+    var w=tip.offsetWidth,h=tip.offsetHeight;
+    var px=x+14, py=y+14;
+    if(px+w>window.innerWidth-8) px=x-w-14;
+    if(px<8) px=8;
+    if(py+h>window.innerHeight-8) py=y-h-14;
+    if(py<8) py=8;
+    tip.style.left=px+'px'; tip.style.top=py+'px';
+  }
+  function hideTip(){tip.classList.remove('on');}
+  document.addEventListener('scroll',hideTip,true);
+  document.addEventListener('click',function(e){ if(!e.target.closest('.hotzone')) hideTip(); });
+
+  // ---- Gráfico 1: vendas por dia (captado, Tray) ----
+  var dias=[
+    {d:'Segunda',dt1:'26/10',dt2:'02/11',a:2302.72,b:7741.04},
+    {d:'Terça',dt1:'27/10',dt2:'03/11',a:21855.60,b:11863.01,live:true},
+    {d:'Quarta',dt1:'28/10',dt2:'04/11',a:2847.99,b:41827.96},
+    {d:'Quinta',dt1:'29/10',dt2:'05/11',a:4926.15,b:22116.26},
+    {d:'Sexta',dt1:'30/10',dt2:'06/11',a:16925.64,b:27998.50},
+    {d:'Sábado',dt1:'31/10',dt2:'07/11',a:15066.28,b:23977.56},
+    {d:'Domingo',dt1:'01/11',dt2:'08/11',a:5541.09,b:21000.18}
+  ];
+  (function(){
+    var svg=document.getElementById('chartDia');
+    var W=720,H=270, padL=36,padR=8,padT=18,padB=46;
+    var plotW=W-padL-padR, plotH=H-padT-padB, base=padT+plotH;
+    var max=42000, NS='http://www.w3.org/2000/svg';
+    function el(n,at){var e=document.createElementNS(NS,n);for(var k in at)e.setAttribute(k,at[k]);return e;}
+    [10000,20000,30000,40000].forEach(function(g){
+      var y=base-(g/max)*plotH;
+      svg.appendChild(el('line',{x1:padL,y1:y,x2:W-padR,y2:y,stroke:'var(--line-2)'}));
+      var t=el('text',{x:4,y:y+3,'font-size':9,fill:'var(--muted)'});t.textContent=(g/1000)+'k';svg.appendChild(t);
+    });
+    var gw=plotW/dias.length, bw=Math.min(26,gw*0.28);
+    dias.forEach(function(o,i){
+      var gx=padL+i*gw, cx=gx+gw/2;
+      var xa=cx-bw-3, xb=cx+3;
+      var ha=(o.a/max)*plotH, hb=(o.b/max)*plotH;
+      svg.appendChild(el('rect',{class:'bar',x:xa,y:base-ha,width:bw,height:ha,rx:3,fill:'var(--sage)'}));
+      svg.appendChild(el('rect',{class:'bar',x:xb,y:base-hb,width:bw,height:hb,rx:3,fill:'var(--pine)'}));
+      var lab=el('text',{x:cx,y:base+16,'font-size':10,fill:'var(--muted)','text-anchor':'middle'});lab.textContent=o.d.slice(0,3).toLowerCase();svg.appendChild(lab);
+      if(o.live){var lv=el('text',{x:cx,y:base+30,'font-size':8.5,fill:'var(--pine)','text-anchor':'middle','font-weight':'700'});lv.textContent='live 03/11';svg.appendChild(lv);}
+      var hz=el('rect',{class:'hotzone',x:gx,y:padT,width:gw,height:plotH});
+      hz.addEventListener('mouseenter',function(e){move(e,o);});
+      hz.addEventListener('mousemove',function(e){move(e,o);});
+      hz.addEventListener('mouseleave',hideTip);
+      hz.addEventListener('click',function(e){e.stopPropagation();move(e,o);});
+      svg.appendChild(hz);
+      function move(e,o){
+        var html='<div class="tt">'+o.d+' — '+o.dt2+(o.live?' · dia da live':'')+'</div>'+
+          '<div class="row"><span>Esta semana</span><span class="vv">'+fmtE(o.b)+'</span></div>'+
+          '<div class="row"><span>Mesmo dia antes ('+o.dt1+')</span><span>'+fmtE(o.a)+'</span></div>'+
+          '<div class="row"><span>Variação</span><span>'+pct(o.a,o.b)+'</span></div>'+
+          '<div class="ex">Valor dos pedidos feitos nesse dia (antes da confirmação do pagamento).</div>';
+        showTip(html,e.clientX,e.clientY);
+      }
+    });
+  })();
+
+  // ---- Gráfico 2: vendas aprovadas pelas duas classificações da Tray (Loja virtual x Particular), antes x agora ----
+  (function(){
+    var svg=document.getElementById('chartCresc');
+    var W=520,H=260,padT=18,padB=42,padL=8,padR=8;
+    var plotH=H-padT-padB, base=padT+plotH, max=150000, NS='http://www.w3.org/2000/svg';
+    function el(n,at){var e=document.createElementNS(NS,n);for(var k in at)e.setAttribute(k,at[k]);return e;}
+    var cols=[
+      {t:'Semana anterior',site:18857.27,eq:42238.20,x:150},
+      {t:'Esta semana',site:62876.81,eq:80521.83,x:330}
+    ];
+    [50000,100000,150000].forEach(function(g){
+      var y=base-(g/max)*plotH;
+      svg.appendChild(el('line',{x1:padL,y1:y,x2:W-padR,y2:y,stroke:'var(--line-2)'}));
+      var t=el('text',{x:padL,y:y-3,'font-size':9,fill:'var(--muted)'});t.textContent='R$'+(g/1000)+'k';svg.appendChild(t);
+    });
+    var bw=120;
+    cols.forEach(function(c){
+      var total=c.site+c.eq;
+      var heq=(c.eq/max)*plotH, hsite=(c.site/max)*plotH;
+      var x=c.x-bw/2;
+      // Particular (base)
+      var r1=el('rect',{class:'bar',x:x,y:base-heq,width:bw,height:heq,rx:3,fill:'var(--sage)'});
+      // Loja virtual (topo)
+      var r2=el('rect',{class:'bar',x:x,y:base-heq-hsite,width:bw,height:hsite,rx:3,fill:'var(--pine)'});
+      svg.appendChild(r1);svg.appendChild(r2);
+      var tot=el('text',{x:c.x,y:base-heq-hsite-8,'font-size':13,fill:'var(--pine-ink)','text-anchor':'middle','font-weight':'600','font-family':'var(--serif)'});tot.textContent=fmt(total);svg.appendChild(tot);
+      var lab=el('text',{x:c.x,y:base+18,'font-size':11,fill:'var(--muted)','text-anchor':'middle'});lab.textContent=c.t;svg.appendChild(lab);
+      function tipSeg(e,nome,val,cor){
+        var html='<div class="tt">'+c.t+'</div>'+
+          '<div class="row"><span>'+nome+'</span><span class="vv">'+fmtE(val)+'</span></div>'+
+          '<div class="row"><span>Total aprovado</span><span>'+fmtE(total)+'</span></div>'+
+          '<div class="ex">'+(cor==='site'?'Classificação "Loja virtual" da Tray (venda aprovada).':'Classificação "Particular" da Tray (venda aprovada).')+'</div>';
+        showTip(html,e.clientX,e.clientY);
+      }
+      [[r1,'Particular',c.eq,'eq'],[r2,'Loja virtual',c.site,'site']].forEach(function(p){
+        p[0].addEventListener('mouseenter',function(e){tipSeg(e,p[1],p[2],p[3]);});
+        p[0].addEventListener('mousemove',function(e){tipSeg(e,p[1],p[2],p[3]);});
+        p[0].addEventListener('mouseleave',hideTip);
+        p[0].addEventListener('click',function(e){e.stopPropagation();tipSeg(e,p[1],p[2],p[3]);});
+      });
+    });
+  })();
+})();
+</script>
 </body>
 </html>
